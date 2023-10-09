@@ -13,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: clip;
+}
+
 math-field {
   --selection-background-color: #7799ff;
   --selection-background-color-focused: #7799ff;
