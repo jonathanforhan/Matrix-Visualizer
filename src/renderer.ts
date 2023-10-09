@@ -136,12 +136,34 @@ export default class Renderer {
         case "zRotation":
           newMat = Matrix.getRotationZ();
           break;
+        case "xOrbit":
+          newMat = Matrix.getOrbitX();
+          break;
+        case "yOrbit":
+          newMat = Matrix.getOrbitY();
+          break;
+        case "zOrbit":
+          newMat = Matrix.getOrbitZ();
+          break;
+        case "xTranslate":
+          newMat = Matrix.getTranslateX();
+          break;
+        case "yTranslate":
+          newMat = Matrix.getTranslateY();
+          break;
+        case "zTranslate":
+          newMat = Matrix.getTranslateZ();
+          break;
+        case "scale":
+          newMat = Matrix.getScaled();
+          break;
       }
       for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
           this._mf.setPromptContent("" + i + j, newMat[i * 4 + j], {});
         }
       }
+      selector.value = "nil";
     }
 
     let t = 0;

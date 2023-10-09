@@ -25,7 +25,7 @@ math-field {
   --selection-background-color-focused: #7799ff;
   --selection-color: rgba(255, 255, 255, 0.87);
   --contains-highlight-background-color: #00000000;
-  font-size: 2rem;
+  font-size: 1.8rem;
   border: none;
   background: transparent;
   min-width: 36rem;
