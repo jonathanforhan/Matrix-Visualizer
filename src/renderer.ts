@@ -16,7 +16,6 @@ export default class Renderer {
     this._gl = this._canvas.getContext('experimental-webgl')! as WebGLRenderingContext;
     this._mf = mf;
     this._ce = new ComputeEngine();
-    this._dt = 0;
 
     const resize = () => [
       this._canvas.width = window.innerWidth - this._mf.clientWidth - 105,
