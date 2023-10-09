@@ -147,15 +147,16 @@ export default class Renderer {
 
       mvp.model = modelPrototype.map(x => {
         if (!isNaN(+x)) return +x;
-        const expr = this._ce.parse(x).evaluate();
-        return expr?.isValid && !isNaN(+expr) ? +expr.valueOf() : 0;
+        const expr = this._ce.parse(x).evaluate().N();
+        console.log(expr, expr.valueOf());
+        return expr?.isValid && !isNaN(+expr.valueOf()) ? +expr.valueOf() : 0;
       });
 
       appendModels.forEach((mat) => {
         mvp.model = Matrix.multiplySquareMatrix(mvp.model, mat.map(x => {
           if (!isNaN(+x)) return +x;
           const expr = this._ce.parse(x).evaluate();
-          return expr?.isValid && !isNaN(+expr) ? +expr.valueOf() : 0;
+          return expr?.isValid && !isNaN(+expr.valueOf()) ? +expr.valueOf() : 0;
         }), 16);
       })
 
