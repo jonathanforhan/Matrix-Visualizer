@@ -1,5 +1,5 @@
 import {MathfieldElement} from "mathlive";
-import Matrix from "./matrix.ts";
+import Matrix, {matrix_t} from "./matrix.ts";
 import {ComputeEngine} from "@cortex-js/compute-engine";
 
 export default class Renderer {
@@ -108,29 +108,41 @@ export default class Renderer {
 
     let mvp: Matrix = new Matrix();
     mvp.projection = Matrix.getProjection(45, this._canvas.width / this._canvas.height, 1, 100);
-    let modelPrototype: string[] = Matrix.getIdentity(4) as unknown as string[];
+    let modelPrototype: string[] = Matrix.getIdentityPrototype();
     let appendModels: string[][] = [];
 
     document.querySelector("#apply")!.addEventListener("click", () => {
-      modelPrototype = Matrix.decodeMatrix(this._mf)
+      modelPrototype = Matrix.decodeMatrix(this._mf);
       appendModels = [];
     });
-    document.querySelector("#append")!.addEventListener("click", () => {
-      appendModels.push(Matrix.decodeMatrix(this._mf));
-    });
+    document.querySelector("#append")!.addEventListener("click", () => appendModels.push(Matrix.decodeMatrix(this._mf)))
     document.querySelector("#reset")!.addEventListener("click", () => {
+      modelPrototype = Matrix.getIdentityPrototype()
+      appendModels = [];
+    });
+    const selector = document.querySelector<HTMLSelectElement>("#selector")!;
+    selector.onchange = () => {
+      let newMat: string[] = [];
+      switch (selector.value) {
+        case "identity":
+          newMat = Matrix.getIdentityPrototype();
+          break;
+        case "xRotation":
+          newMat = Matrix.getRotationX();
+          break;
+        case "yRotation":
+          newMat = Matrix.getRotationY();
+          break;
+        case "zRotation":
+          newMat = Matrix.getRotationZ();
+          break;
+      }
       for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
-          let c = i === j ? '1' : '0';
-          this._mf.setPromptContent("" + i + j, c, {});
+          this._mf.setPromptContent("" + i + j, newMat[i * 4 + j], {});
         }
       }
-    });
-    document.querySelector("#clear")!.addEventListener("click", () => {
-      modelPrototype = Matrix.getIdentity(4) as unknown as string[];
-      appendModels = [];
-      document.querySelector<HTMLButtonElement>("#reset")!.click();
-    });
+    }
 
     let t = 0;
     let then = 0;
@@ -145,20 +157,14 @@ export default class Renderer {
       this._ce.symbol('t').value = t;
       this._ce.symbol('T').value = t;
 
-      mvp.model = modelPrototype.map(x => {
+      const evaluate = (mat: string[]): matrix_t => mat.map(x => {
         if (!isNaN(+x)) return +x;
         const expr = this._ce.parse(x).evaluate().N();
-        console.log(expr, expr.valueOf());
         return expr?.isValid && !isNaN(+expr.valueOf()) ? +expr.valueOf() : 0;
-      });
-
-      appendModels.forEach((mat) => {
-        mvp.model = Matrix.multiplySquareMatrix(mvp.model, mat.map(x => {
-          if (!isNaN(+x)) return +x;
-          const expr = this._ce.parse(x).evaluate();
-          return expr?.isValid && !isNaN(+expr.valueOf()) ? +expr.valueOf() : 0;
-        }), 16);
       })
+
+      mvp.model = evaluate(modelPrototype);
+      appendModels.forEach(mat => mvp.model = Matrix.multiplySquareMatrix(mvp.model, evaluate(mat), 16));
 
       this._gl.viewport(0, 0, this._canvas.width, this._canvas.height);
       this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);

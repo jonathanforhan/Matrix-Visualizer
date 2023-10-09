@@ -8,7 +8,7 @@
   </head>
   <body style="display: flex; align-items: center">
     <canvas width="2000" height="1000" id="gl-canvas"></canvas>
-    <div style="padding: 2rem">
+    <div style="padding: 2rem; width: 100%">
       <math-field read-only id="matrix">
         \begin{align*}\left[\begin{array}{cccc}
         \placeholder[00]{\cos t} & \placeholder[01]{0} & \placeholder[02]{\sin t} & \placeholder[03]{0}\\
@@ -17,11 +17,20 @@
         \placeholder[30]{0} & \placeholder[31]{0} & \placeholder[32]{0} & \placeholder[33]{1}
         \end{array}\right]\end{align*}
       </math-field>
-      <div style="display: flex; justify-content: center; align-items: center; margin: 1rem">
+      <div class="wrapper">
         <button id="apply">apply</button>
         <button id="append">append</button>
         <button id="reset">reset</button>
-        <button id="clear">clear</button>
+      </div>
+      <div class="wrapper" style="padding-top: 3rem">
+        <p>Presets</p>
+        <select id="selector" style="margin: 1rem; padding: 0.3rem">
+          <option value="nil"> </option>
+          <option value="identity">identity matrix</option>
+          <option value="xRotation">rotate x</option>
+          <option value="yRotation">rotate y</option>
+          <option value="zRotation">rotate z</option>
+        </select>
       </div>
     </div>
   </body>

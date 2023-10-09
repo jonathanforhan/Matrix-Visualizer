@@ -8,28 +8,19 @@ export default class Matrix {
   public projection: matrix_t;
 
   constructor() {
-    this.model = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1,
-    ];
+    this.model = Matrix.getIdentity(16);
     this.view = [
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
       0, 0, -10, 1
     ];
-    this.projection = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1,
-    ]
+    this.projection = Matrix.getIdentity(16);
   }
 
-  static decodeMatrix(mf: MathfieldElement, n = 4): string[] {
-    let arr = new Array(n * n);
+  static decodeMatrix(mf: MathfieldElement, x = 16): string[] {
+    let n = Math.sqrt(x)
+    let arr = new Array(16);
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
         arr[i * n + j] = mf.getPromptValue("" + i + j);
@@ -38,7 +29,7 @@ export default class Matrix {
     return arr;
   }
 
-  static multiplySquareMatrix(a: matrix_t, b: matrix_t, x: number) {
+  static multiplySquareMatrix(a: matrix_t, b: matrix_t, x: number): matrix_t {
     const n = Math.sqrt(x);
     if (a.length !== b.length || a.length !== x) {
       throw `Not a ${n} by ${n} matrix`;
@@ -62,11 +53,48 @@ export default class Matrix {
     ];
   }
 
-  static getIdentity(n: number): number[] {
-    let mat = new Array(n * n).fill(0);
+  static getIdentity(x: number): matrix_t {
+    let n = Math.sqrt(x);
+    let mat = new Array(x).fill(0);
     for (let i = 0; i < mat.length; i += n + 1) {
       mat[i] = 1;
     }
     return mat;
   }
+
+  static getIdentityPrototype(): string[] {
+    return [
+      "1", "0", "0", "0",
+      "0", "1", "0", "0",
+      "0", "0", "1", "0",
+      "0", "0", "0", "1",
+    ];
+  }
+
+  static getRotationX(): string[] {
+    return [
+      "1", "0", "0", "0",
+      "0", "\\cos t", "-\\sin t", "0",
+      "0", "\\sin t", "\\cos t", "0",
+      "0", "0", "0", "1",
+    ];
+  };
+
+  static getRotationY(): string[] {
+    return [
+      "\\cos t", "0", "\\sin t", "0",
+      "0", "1", "0", "0",
+      "-\\sin t", "0", "\\cos t", "0",
+      "0", "0", "0", "1",
+    ];
+  };
+
+  static getRotationZ(): string[] {
+    return [
+      "\\cos t", "-\\sin t", "0", "0",
+      "\\sin t", "\\cos t", "0", "0",
+      "0", "0", "1", "0",
+      "0", "0", "0", "1",
+    ];
+  };
 }

@@ -5,7 +5,7 @@ import {cubeVertices} from "./cube.ts";
 import Renderer from "./renderer.ts"
 import * as textureUrl from "/public/snhu.png";
 
-const canvas = document.querySelector("#gl-canvas")! as HTMLCanvasElement;
+const canvas = document.querySelector("canvas")!;
 const matrix = document.querySelector<MathfieldElement>('#matrix')!;
 
 /* Main Driver */
