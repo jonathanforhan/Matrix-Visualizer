@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/snhu.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matrix Visualizer</title>
+  </head>
+  <body style="display: flex; align-items: center">
+    <canvas width="2000" height="1000" id="gl-canvas"></canvas>
+    <div style="padding: 2rem">
+      <math-field read-only id="matrix">
+        \begin{align*}\left[\begin{array}{cccc}
+        \placeholder[00]{1} & \placeholder[01]{0} & \placeholder[02]{0} & \placeholder[03]{0}\\
+        \placeholder[10]{0} & \placeholder[11]{1} & \placeholder[12]{0} & \placeholder[13]{0}\\
+        \placeholder[20]{0} & \placeholder[21]{0} & \placeholder[22]{1} & \placeholder[23]{0}\\
+        \placeholder[30]{0} & \placeholder[31]{0} & \placeholder[32]{0} & \placeholder[33]{1}
+        \end{array}\right]\end{align*}
+      </math-field>
+      <div style="display: flex; justify-content: center; align-items: center; margin: 1rem">
+        <button id="apply">apply</button>
+        <button id="append">append</button>
+        <button id="reset">reset</button>
+        <button id="clear">clear</button>
+      </div>
+    </div>
+  </body>
+  <script defer src="//unpkg.com/mathlive"></script>
+  <script type="module" src="src/main.ts"></script>
+</html>
