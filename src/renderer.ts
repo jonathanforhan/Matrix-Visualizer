@@ -7,7 +7,6 @@ export default class Renderer {
   private readonly _gl: WebGLRenderingContext;
   private readonly _mf: MathfieldElement;
   private readonly _ce: ComputeEngine;
-  private _dt: number;
   private _buffer?: WebGLBuffer;
   private _shaderProgram?: WebGLProgram;
   private _textureID?: WebGLTexture;
@@ -166,18 +165,9 @@ export default class Renderer {
       selector.value = "nil";
     }
 
-    let t = 0;
-    let then = 0;
     const animate = (now: number) => {
-      now *= 0.001;
-      this._dt = now - then;
-      then = now;
-      t += this._dt;
-
       mvp.projection = Matrix.getProjection(45, this._canvas.width / this._canvas.height, 1, 100);
-
-      this._ce.symbol('t').value = t;
-      this._ce.symbol('T').value = t;
+      this._ce.symbol('t').value = this._ce.symbol('T').value = now * 0.001;
 
       const evaluate = (mat: string[]): matrix_t => mat.map(x => {
         if (!isNaN(+x)) return +x;
